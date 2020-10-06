@@ -18,7 +18,11 @@ describe Oystercard do
     expect { subject.top_up 1}.to raise_error "MAX #{Oystercard::MAXIMUM_LIMIT} EXCEEDED"
   end 
 
+  it { is_expected.to respond_to(:deduct_fare).with(1).argument }
 
-
+  it 'Does deduct fare' do 
+    subject.top_up(10)
+    expect(subject.deduct_fare(6)).to eq(4)
+  end
 
 end 
