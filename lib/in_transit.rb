@@ -2,11 +2,11 @@ require_relative 'oystercard.rb'
 
 class InTransit
   MINIMUM_FARE = 1
-  attr_reader :card, :entry_station
+  attr_reader :card, :entry_station, :journey_history
 
   def initialize
-
     @card = Oystercard.new
+    @journey_history = []
   end
 
   def in_journey?
@@ -18,8 +18,9 @@ class InTransit
     @entry_station = station
   end 
 
-  def touch_out
+  def touch_out(station)
     @card.deduct_fare(MINIMUM_FARE)
+    @journey_history << {:entry_station => @entry_station, :exit_station => station}
     @entry_station = nil
   end
 
