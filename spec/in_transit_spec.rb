@@ -28,18 +28,18 @@ describe InTransit do
 
       it 'it deactivates the card when touched out' do 
         intransit.touch_in(station)
-        intransit.touch_out
+        intransit.touch_out(station)
         expect(intransit.in_journey?).to eq(false)
       end
 
       it 'deducts min fare on touch out' do 
         intransit.touch_in(station)
-        expect{ intransit.touch_out }.to change{ intransit.card.balance }.by (-InTransit::MINIMUM_FARE)
+        expect{ intransit.touch_out(station) }.to change{ intransit.card.balance }.by (-InTransit::MINIMUM_FARE)
       end
 
       it 'forgets the entry station on touch out' do
         intransit.touch_in(station)
-        intransit.touch_out
+        intransit.touch_out(station)
         expect(intransit.entry_station).to eq nil
       end
 end
