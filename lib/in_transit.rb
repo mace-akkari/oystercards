@@ -2,6 +2,7 @@ require 'oystercard.rb'
 
 class InTransit
   MINIMUM_FARE = 1
+  attr_reader :card
 
   def initialize
     @activated = false
@@ -19,6 +20,7 @@ class InTransit
   end 
 
   def touch_out
+    @card.deduct_fare(MINIMUM_FARE)
     @activated = false
   end
 
