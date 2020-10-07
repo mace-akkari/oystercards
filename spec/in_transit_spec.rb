@@ -3,10 +3,9 @@ require 'oystercard'
 
 describe InTransit do
   let(:intransit) { InTransit.new }
-  let(:oystercard) { Oystercard.new }
   describe 'Sufficient funds' do 
     before do 
-      allow_any_instance_of(Oystercard).to receive(:balance).and_return(2)
+      intransit.card.top_up(2)
     end
       it 'is not in transit' do
         expect(intransit.in_journey?).to eq(false)
@@ -17,19 +16,19 @@ describe InTransit do
       it { is_expected.to respond_to :touch_out } 
 
       it 'it activates the card when touched in' do 
-        subject.touch_in
+        intransit.touch_in
         expect(intransit.in_journey?).to eq(true)
       end
 
       it 'it deactivates the card when touched out' do 
-        subject.touch_in
-        subject.touch_out
+        intransit.touch_in
+        intransit.touch_out
         expect(intransit.in_journey?).to eq(false)
       end
 
       it 'deducts min fare on touch out' do 
         intransit.touch_in
-        expect{ intransit.touch_out }.to change{ oystercard.balance }.by (InTransit::MINIMUM_FARE)
+        expect{ intransit.touch_out }.to change{ intransit.card.balance }.by (-InTransit::MINIMUM_FARE)
       end
 end
 
