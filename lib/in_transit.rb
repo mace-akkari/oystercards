@@ -1,27 +1,26 @@
-require 'oystercard.rb'
+require_relative 'oystercard.rb'
 
 class InTransit
   MINIMUM_FARE = 1
-  attr_reader :card
+  attr_reader :card, :entry_station
 
   def initialize
-    @activated = false
+
     @card = Oystercard.new
   end
 
   def in_journey?
-    @activated 
+    !@entry_station.nil?
   end
 
-  def touch_in
-    #check_balance - oystercard class
+  def touch_in(station)
     fail "Insufficient funds: Balance less than #{InTransit::MINIMUM_FARE}" if @card.balance < MINIMUM_FARE
-    @activated = true
+    @entry_station = station
   end 
 
   def touch_out
     @card.deduct_fare(MINIMUM_FARE)
-    @activated = false
+    @entry_station = nil
   end
 
 end
